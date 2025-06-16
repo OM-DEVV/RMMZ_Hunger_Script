@@ -1,0 +1,35 @@
+// --- Start of DEBUG Script ---
+
+console.log("--- Hunger Tick ---"); // Announce that the script is running
+
+// --- Step 1: Get Current Values ---
+const currentHunger = $gameVariables.value(56);
+const baseDrop = $gameVariables.value(63);
+console.log("Current Hunger: " + currentHunger + ", Base Drop: " + baseDrop);
+
+// --- Step 2: Calculate Modifiers ---
+const satiety = $gameVariables.value(64);
+const satietyModifier = 1 - (satiety / 200);
+const wellFed = $gameSwitches.value(61);
+const poisoned = $gameSwitches.value(62);
+const starving = $gameParty.leader().isStateAffected(61);
+console.log("Satiety Mod: " + satietyModifier + ", WellFed: " + wellFed + ", Poisoned: " + poisoned + ", Starving: " + starving);
+
+// --- Step 3: Final Calculation ---
+let effectModifier = 1.0;
+if (wellFed) { effectModifier *= 0.5; }
+if (poisoned) { effectModifier *= 1.5; }
+
+let statusModifier = 1.0;
+if (starving) { statusModifier *= 2.0; }
+
+const finalDrop = baseDrop * satietyModifier * effectModifier * statusModifier;
+console.log(">>> Final Drop Amount: " + finalDrop);
+
+const newHunger = Math.max(0, currentHunger - Math.floor(finalDrop));
+console.log(">>> New Hunger Value: " + newHunger);
+
+// --- Step 4: Set the Variable ---
+$gameVariables.setValue(56, newHunger);
+
+// --- End of DEBUG Script ---
