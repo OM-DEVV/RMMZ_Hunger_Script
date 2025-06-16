@@ -138,3 +138,81 @@ PROBLEM: Hunger isn't draining at all.
     3. Is Variable #61 (HungerDropInterval) not set to a
        super high number?
 	   
+	   
+------------------------------------------------------------
+    SECTION 4: HOW TO EDIT THE SCRIPT
+------------------------------------------------------------
+
+If you ever need to change which Variables, Switches, or
+States this system uses, you will need to edit the
+multi-line SCRIPT command inside the parallel common event.
+
+Below is a map of the script, showing exactly which number
+corresponds to which game mechanic.
+
+
+--- SCRIPT MAP ---
+
+To edit, open the `SYS: Hunger System` common event, find
+the `Script...` command, and change the numbers as needed.
+
+Original Script Line:
+const currentHunger = $gameVariables.value(56);
+  - PURPOSE: Your main Hunger variable.
+  - EDIT: Change the `56` to your new Hunger variable ID.
+
+Original Script Line:
+const baseDrop = $gameVariables.value(63);
+  - PURPOSE: The base amount to drop per tick.
+  - EDIT: Change the `63` to your new Base Drop variable ID.
+
+Original Script Line:
+const satiety = $gameVariables.value(64);
+  - PURPOSE: The player's Satiety level from food.
+  - EDIT: Change the `64` to your new Satiety variable ID.
+
+Original Script Line:
+const wellFed = $gameSwitches.value(61);
+  - PURPOSE: The "Well Fed" buff switch.
+  - EDIT: Change the `61` to your new buff switch ID.
+
+Original Script Line:
+const poisoned = $gameSwitches.value(62);
+  - PURPOSE: The "Poisoned" debuff switch.
+  - EDIT: Change the `62` to your new debuff switch ID.
+
+Original Script Line:
+const starving = $gameParty.leader().isStateAffected(61);
+  - PURPOSE: The "Starving" status effect.
+  - EDIT: Change the `61` to your new Starving state ID.
+
+Original Script Line:
+$gameVariables.setValue(56, newHunger);
+  - PURPOSE: This is the final step where the script sets
+    the new hunger value.
+  - EDIT: This number MUST match the Hunger variable ID you
+    set at the very top of the script. Change this `56` to
+    your new Hunger variable ID.
+
+
+--- ADVANCED: Changing Modifier Strength ---
+
+You can also edit the script to change how powerful the
+modifiers are. These are found in the "Calculation"
+section of the script.
+
+To edit Satiety strength:
+  - Find the line: const satietyModifier = 1 - (satiety / 200);
+  - The `200` controls the power.
+    - A HIGHER number (e.g., 400) makes satiety WEAKER.
+    - A LOWER number (e.g., 150) makes satiety STRONGER.
+
+To edit Buff/Debuff strength:
+  - Find lines like: if (wellFed) { effectModifier *= 0.5; }
+  - The `0.5` is a 50% reduction. Change this to `0.75` for
+    a weaker 25% reduction.
+  - For the poison line `*= 1.5`, this is a 50% increase.
+    Change it to `*= 2.0` to make it double the drain rate.
+
+Always be careful when editing the script, and only change
+the numbers unless you are comfortable with Javascript.
